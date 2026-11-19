@@ -1,0 +1,22 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>IronBook Firebase Login Test</title>
+<style>body{font:16px system-ui;max-width:480px;margin:50px auto;padding:20px;background:#f1f5f9}input,button{box-sizing:border-box;width:100%;padding:12px;margin:8px 0}button{cursor:pointer}pre{white-space:pre-wrap;overflow-wrap:anywhere}label{display:block}</style>
+<h1>IronBook login connection test</h1><p>This separate test does not change your existing website or Firestore rules. Use a test account, not customer information. Creating an account adds a real Firebase Authentication user; it does not grant administrator access.</p>
+<form id="form"><label>Email<input id="email" type="email" autocomplete="username" required></label><label>Password<input id="password" type="password" autocomplete="off" minlength="6" required></label><button id="login" type="submit" disabled>Log in</button><button id="create" type="button" disabled>Create test account</button></form><button id="logout" disabled>Sign out</button><pre id="status" role="status">Loading Firebase SDK...</pre>
+<script type="module">
+const status=document.getElementById('status');
+const buttons=[...document.querySelectorAll('button')];
+try {
+ const {initializeApp}=await import('https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js');
+ const {getAuth,setPersistence,browserSessionPersistence,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged}=await import('https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js');
+ const app=initializeApp({apiKey:'AIzaSyAsMliQuvAnF9MRUbfl5B1K207ys4NpYw0',authDomain:'ironbook-41fb6.firebaseapp.com',projectId:'ironbook-41fb6',storageBucket:'ironbook-41fb6.firebasestorage.app',messagingSenderId:'110718000745',appId:'1:110718000745:web:83e9759ff1e78870008cf8'});
+ const auth=getAuth(app);await setPersistence(auth,browserSessionPersistence);
+ const form=document.getElementById('form');
+ const password=document.getElementById('password');
+ onAuthStateChanged(auth,u=>{status.textContent=u?'Signed in successfully. Firebase UID: '+u.uid+'\nThis confirms Authentication only, not Firestore or the existing app integration.':'Firebase loaded. Create a test account or log in.';});
+ buttons.forEach(b=>b.disabled=false);
+ async function run(create){if(!form.reportValidity())return;buttons.forEach(b=>b.disabled=true);status.textContent='Connecting...';try{await (create?createUserWithEmailAndPassword:signInWithEmailAndPassword)(auth,document.getElementById('email').value.trim(),password.value);password.value='';}catch(e){status.textContent=(e.code||'Error')+': '+e.message;}finally{buttons.forEach(b=>b.disabled=false);}}
+ form.onsubmit=e=>{e.preventDefault();run(false)};
+ document.getElementById('create').onclick=()=>run(true);
+ document.getElementById('logout').onclick=async()=>{try{await signOut(auth)}catch(e){status.textContent=e.code+': '+e.message}};
+} catch(e){status.textContent='Could not initialize Firebase: '+e.message+' Check your internet connection and browser console.';}
+</script></html>
