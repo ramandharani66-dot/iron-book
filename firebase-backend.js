@@ -21,7 +21,21 @@ async function memberAction(id,data){return runTransaction(db,async tx=>{
  const changes={planId:Number(data.planId),startDate:start,endDate:addMonths(start,p.months)};
  const out={...(member||clean(data.member||{})),...changes,id:memberId};
  tx.set(ids.r,{next:ids.next});tx.set(ref('members',memberId),out);
- const amount=money(data.amount);if(amount>0)tx.set(ref('payments',paymentId),{id:paymentId,memberId,planId:Number(data.planId),amount,mode:data.mode||'UPI',paidOn:today(),note:id?'Renewal':'Joining'});
+ const amount = money(data.amount);
+
+if (amount > 0) {
+  tx.set(ref('payments', paymentId), {
+    id: paymentId,
+    memberId,
+    planId: Number(data.planId),
+    amount,
+    mode: data.mode || 'UPI',
+    paidOn: today(),
+    fromDate: start,
+    toDate: changes.endDate,
+    note: id ? 'Renewal' : 'Joining'
+  });
+}
  return out;
 })}
 async function request(method,path,data={}){
