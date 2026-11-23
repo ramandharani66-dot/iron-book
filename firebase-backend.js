@@ -52,4 +52,49 @@ async function request(method,path,data={}){
  }
  throw Error('Unsupported operation.');
 }
-window.IronFirebase={request};
+window.IronFirebase = {
+  async request(method, path, data = {}) {
+    try {
+      return await request(method, path, data);
+    } catch (error) {
+      console.error("IronBook request failed:", {
+        path,
+        code: error?.code,
+        message: error?.message
+      });
+
+      // The existing login/signup screen expects JSON in error.message.
+      if (path.startsWith("/api/auth/")) {
+        const code = error?.code || "";
+        let message = error?.message || "Authentication failed.";
+
+        const messages = {
+          "auth/email-already-in-use":
+            "This email already has an account. Use Log in instead.",
+          "auth/invalid-email":
+            "Please enter a valid email address.",
+          "auth/weak-password":
+            "The password is too weak. Try a longer password.",
+          "auth/invalid-credential":
+            "The email or password is incorrect.",
+          "auth/operation-not-allowed":
+            "Email/password sign-in is not enabled for this Firebase project.",
+          "auth/too-many-requests":
+            "Too many attempts. Please wait before trying again.",
+          "auth/network-request-failed":
+            "A network error occurred. Check your connection."
+        };
+
+        message = messages[code] || message;
+
+        throw new Error(
+          JSON.stringify({
+            message: code ? `${message} (${code})` : message
+          })
+        );
+      }
+
+      throw error;
+    }
+  }
+};
