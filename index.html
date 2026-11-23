@@ -91,7 +91,32 @@
     button.style.color = dark ? "#ffffff" : "#111827";
   });
 
-  document.body.appendChild(button);
+    document.body.appendChild(button);
+
+  var info = document.createElement("a");
+  info.href = "./about.html";
+  info.setAttribute("aria-label", "About and privacy");
+  info.style.position = "fixed";
+  info.style.right = "16px";
+  info.style.bottom = "64px";
+  info.style.zIndex = "9999";
+  info.style.width = "44px";
+  info.style.height = "44px";
+  info.style.display = "grid";
+  info.style.placeItems = "center";
+  info.style.borderRadius = "999px";
+  info.style.border = "1px solid rgba(128,128,128,.4)";
+  info.style.background = "#111827";
+  info.style.color = "#ffffff";
+  info.style.fontSize = "18px";
+  info.style.fontWeight = "700";
+  info.style.textDecoration = "none";
+  info.style.cursor = "pointer";
+  info.style.boxShadow = "0 4px 12px rgba(0,0,0,.25)";
+  info.textContent = "ℹ️";
+
+  document.body.appendChild(info);
+
 })();
     </script>
   </body>
