@@ -52,5 +52,47 @@
         document.body.appendChild(box);
       }
     </script>
+
+    <script>
+(function () {
+  var saved = localStorage.getItem("ironbook-theme");
+  var dark = saved !== "light";
+
+  function applyTheme() {
+    document.documentElement.classList.toggle("dark", dark);
+  }
+
+  applyTheme();
+
+  var button = document.createElement("button");
+  button.type = "button";
+  button.setAttribute("aria-label", "Change theme");
+  button.style.position = "fixed";
+  button.style.right = "16px";
+  button.style.bottom = "16px";
+  button.style.zIndex = "9999";
+  button.style.padding = "10px 14px";
+  button.style.borderRadius = "999px";
+  button.style.border = "1px solid rgba(128,128,128,.4)";
+  button.style.background = dark ? "#111827" : "#ffffff";
+  button.style.color = dark ? "#ffffff" : "#111827";
+  button.style.fontSize = "14px";
+  button.style.fontWeight = "600";
+  button.style.cursor = "pointer";
+  button.style.boxShadow = "0 4px 12px rgba(0,0,0,.25)";
+  button.textContent = dark ? "☀️ Light" : "🌙 Dark";
+
+  button.addEventListener("click", function () {
+    dark = !dark;
+    localStorage.setItem("ironbook-theme", dark ? "dark" : "light");
+    applyTheme();
+    button.textContent = dark ? "☀️ Light" : "🌙 Dark";
+    button.style.background = dark ? "#111827" : "#ffffff";
+    button.style.color = dark ? "#ffffff" : "#111827";
+  });
+
+  document.body.appendChild(button);
+})();
+    </script>
   </body>
 </html>
