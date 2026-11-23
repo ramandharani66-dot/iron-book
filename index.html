@@ -3,22 +3,54 @@
   <head>
     <meta charset="UTF-8" />
     <title>IronBook — Gym Membership Manager</title>
-    <meta name="description" content="Track gym members, renewals, check-ins and payments." />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+
+    <meta
+      name="description"
+      content="Track gym members, renewals, check-ins and payments."
+    />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1"
+    />
+
     <link rel="icon" type="image/png" href="./favicon.png" />
-        <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
-    <script type="module">
-try {
- await import('./firebase-backend.js');
- await import('./assets/index-Dh8Xv2qj.js');
-} catch(error) {
- const box=document.createElement('pre');box.style.cssText='padding:24px;white-space:pre-wrap';box.textContent='Website initialization failed: '+error.message+'
-Open the published website directly in your browser.';document.body.appendChild(box);
-}
-</script>
-    <link rel="stylesheet" crossorigin href="./assets/index-DthAY8Bp.css">
+
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800&f[]=satoshi@400,500,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      crossorigin
+      href="./assets/index-DthAY8Bp.css"
+    />
   </head>
+
   <body>
     <div id="root"></div>
+
+    <script type="module">
+      try {
+        await import("./firebase-backend.js");
+        await import("./assets/index-Dh8Xv2qj.js");
+      } catch (error) {
+        console.error("IronBook initialization failed:", error);
+
+        const box = document.createElement("pre");
+
+        box.style.cssText =
+          "padding:24px;white-space:pre-wrap;background:#fff;color:#111;";
+
+        box.textContent = [
+          "IronBook could not start.",
+          String(error?.message || error),
+          "Please copy this message and share it for troubleshooting."
+        ].join("\n");
+
+        document.body.appendChild(box);
+      }
+    </script>
   </body>
 </html>
